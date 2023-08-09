@@ -94,17 +94,17 @@ class StudentServiceTest {
 
     @Test
     void testUpdateStudent()  {
-        // Prepare
+
         String updateStudent = "Coco";
         Long studentIdToUpdate = 1L;
         Student existingStudent = new Student(updateStudent, "Alice", LocalDate.of(1990, OCTOBER, 13));
         when(studentRepository.findById(studentIdToUpdate)).thenReturn(Optional.of(existingStudent));
         when(studentRepository.findStudentByEmail("newemail@example.com")).thenReturn(Optional.empty());
 
-        // Execute
+
         assertDoesNotThrow(() -> studentService.updateStudent(studentIdToUpdate, "New Name", "newemail@example.com"));
 
-        // Verify
+
         verify(studentRepository, times(1)).save(existingStudent);
         assertEquals("New Name", existingStudent.getName());
         assertEquals("newemail@example.com", existingStudent.getEmail());
@@ -112,11 +112,10 @@ class StudentServiceTest {
 
     @Test
     void testUpdateStudentThrowsInvalidStudentIdException() {
-        // Prepare
+
         Long nonExistingStudentId = 10L;
         when(studentRepository.findById(nonExistingStudentId)).thenReturn(Optional.empty());
 
-        // Execute and Verify
         assertThrows(InvalidStudentIdException.class,
                 () -> studentService.updateStudent(nonExistingStudentId, "New Name", "newemail@example.com"));
     }
